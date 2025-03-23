@@ -3,9 +3,10 @@ from django.db import models
 
 
 class User(models.Model):
-    name = models.CharField(max_length=50)
+    username = models.CharField(max_length=50, default="default")
+    password = models.CharField(max_length=50, default="none")
     def __str__(self):
-        return self.name
+        return self.username
 
 
 class Product(models.Model):
@@ -20,7 +21,7 @@ class Product(models.Model):
 
 class Payment(models.Model):
     product = models.ForeignKey(Product, on_delete=models.CASCADE)
-    user_id = models.ForeignKey(User, on_delete=models.CASCADE)
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
     order_date = models.DateTimeField(auto_now_add=True)
     comment = models.TextField()
 
