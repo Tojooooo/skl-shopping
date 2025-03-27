@@ -14,10 +14,3 @@ INSERT INTO shop_product (name, description, price) VALUES
 ('Keyboard', 'Mechanical keyboard with RGB lighting', 80),
 ('Mouse', 'Wireless gaming mouse', 40);
 
--- Insert payments into the Payment table
-INSERT INTO shop_payment (user_id, product_id, order_date, comment) VALUES
-(1, 1, '2025-03-20', 'tsara ilay entana'),
-(2, 2, '2025-03-21', 'ratsy izy'),
-(3, 3, '2025-03-22', 'tsy ratsy'),
-(4, 4, '2025-03-23', 'tena tsara'),
-(5, 5, '2025-03-24', 'misy olana');

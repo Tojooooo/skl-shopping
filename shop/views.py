@@ -1,14 +1,11 @@
+from django.http import JsonResponse
 from django.shortcuts import render, get_object_or_404, redirect
 from django.contrib.auth.decorators import login_required
-from .models import Product, Payment, User
-from django.forms import ModelForm
+import joblib
+
+from shop.forms import CommentForm
+from .models import Product, Payment, User,Comments
 from django.contrib import messages
-
-
-class PaymentForm(ModelForm):
-    class Meta:
-        model = Payment
-        fields = ['comment']
 
 
 def login_view(request):
@@ -56,9 +53,50 @@ def product_list(request):
 
     return render(request, 'shop/home.html', {
         'products': products,
-        'purchased_products': purchased_products,
-        'user_payments': user_payments
+        'purchased_products': purchased_products
     })
+
+def comment_add(request):
+    user_id = request.session.get('user_id')
+    if not user_id:
+        return redirect('login')
+    
+
+
+def product_comments(request, product_id):
+    user_id = request.session.get('user_id')
+    if not user_id:
+        redirect('login')
+    user = User.objects.get(id=user_id)
+    product = get_object_or_404(Product, id=product_id)
+    comments = Comments.objects.filter(product=product)
+
+    if request.method == "POST":
+        form = CommentForm(request.POST)
+        if form.is_valid():
+            comment = form.save(commit=False)
+            comment.product = product
+            comment.user = user
+            bow_model = joblib.load("bow_model.plk")
+            tfidf_model = joblib.load("tfidf_model.plk")
+
+            new_comment = [comment.content]
+
+            # Prédiction
+            # pred_bow = bow_model.predict(new_comment)[0]
+            comment.type = tfidf_model.predict(new_comment)[0]  
+            comment.save()
+            return redirect('comments', product_id=product.id)  # Recharge la page après l'ajout
+    else:
+        form = CommentForm()
+
+    return render(request, 'shop/comment_form.html', {
+        'product': product,
+        'form': form,
+        'comments': comments
+    })
+
+
 
 
 def payment_view(request, product_id):
@@ -69,18 +107,9 @@ def payment_view(request, product_id):
     product = get_object_or_404(Product, id=product_id)
     user = User.objects.get(id=user_id)
 
-    if request.method == 'POST':
-        form = PaymentForm(request.POST)
-        if form.is_valid():
-            payment = form.save(commit=False)
-            payment.product = product
-            payment.user = user
-            payment.save()
-            return redirect('product_list')
-    else:
-        form = PaymentForm()
+    payement = Payment()
+    payement.user = user
+    payement.product = product
+    payement.save()
 
-    return render(request, 'shop/order_form.html', {
-        'product': product,
-        'form': form
-    })
+    return redirect('product_list')

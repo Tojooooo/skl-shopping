@@ -17,7 +17,17 @@ CREATE TABLE IF NOT EXISTS Product (
 CREATE TABLE IF NOT EXISTS Payment (
     id INT AUTO_INCREMENT PRIMARY KEY,
     user_id INT NOT NULL,
+    product_id INT NOT NULL,
     order_date DATE DEFAULT now(),
-    comment VARCHAR(255) DEFAULT "no comment",
-    FOREIGN KEY (user_id) REFERENCES User(id)
+    FOREIGN KEY (user_id) REFERENCES User(id),
+    FOREIGN KEY (product_id) REFERENCES Product(id)
+);
+
+CREATE TABLE IF NOT EXISTS Comments(
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    id_user INT NOT NULL,
+    id_product INT NOT NULL,
+    content VARCHAR(255) not null,
+    FOREIGN KEY (id_user) REFERENCES User(id),
+    FOREIGN KEY (id_product) REFERENCES Product(id)
 );
