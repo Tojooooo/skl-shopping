@@ -24,6 +24,7 @@ class Payment(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     order_date = models.DateTimeField(auto_now_add=True)
     comment = models.TextField()
+    sentiment = models.IntegerField(choices=[(0, 'Negative'), (1, 'Positive')], default=1)
 
     def __str__(self):
         return f"Payment {self.id} - {self.product.name}"
