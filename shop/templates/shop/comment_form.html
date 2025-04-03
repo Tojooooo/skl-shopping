@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Fandoavana</title>
+    <title>Fanehoan-kevitra - {{ product.name }}</title>
     <!-- Custom CSS -->
     <link rel="stylesheet" href="{% static 'css/styles.css' %}">
     <!-- Offline -->
@@ -43,7 +43,7 @@
             <div class="col-md-8 col-md-offset-2">
                 <div class="panel panel-default">
                     <div class="panel-heading">
-                        <h3 class="panel-title">Hividy an'ito: {{ product.name }}</h3>
+                        <h3 class="panel-title">Manehoa hevitra ho an'ito: {{ product.name }}</h3>
                     </div>
                     <div class="panel-body">
                         <div class="row">
@@ -53,29 +53,20 @@
                             <div class="col-md-8">
                                 <h4>{{ product.name }}</h4>
                                 <p>{{ product.description }}</p>
-                                <h3>Ar{{ product.price }}</h3>
+                                <div class="alert alert-success">
+                                    <strong>Entana efa novidiana ity</strong> - Afaka maneho hevitra.
+                                </div>
                             </div>
                         </div>
                         <hr>
                         <form method="post">
                             {% csrf_token %}
                             <div class="form-group">
-                                <label for="{{ form.comment.id_for_label }}">Hevitra</label>
+                                <label for="{{ form.comment.id_for_label }}">Ny hevitrao</label>
                                 {{ form.comment }}
                             </div>
-                            <button type="submit" class="btn btn-success btn-lg btn-block">Vidina</button>
+                            <button type="submit" class="btn btn-success btn-lg btn-block">Alefa</button>
                         </form>
-                        <!-- check classifying -->
-                        {% if form.comment.value %}
-                        <div class="alert alert-{% if payment.sentiment == 1 %}success{% else %}warning{% endif %}">
-                            <strong>Classification:</strong>
-                            {% if payment.sentiment == 1 %}
-                                Positif
-                            {% else %}
-                                Negatif
-                            {% endif %}
-                        </div>
-                        {% endif %}
                     </div>
                 </div>
             </div>

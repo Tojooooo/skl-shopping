@@ -6,8 +6,9 @@ import numpy as np
 import nltk
 from nltk.tokenize import word_tokenize
 import os
+import base_dir
 
-nltk.download('punkt')
+nltk.download('punkt_tab')
 
 
 def train_word2vec_model(X_train, X_test, y_train, y_test):
@@ -44,6 +45,6 @@ def train_word2vec_model(X_train, X_test, y_train, y_test):
     print(confusion_matrix(y_test, y_pred))
 
     # Sauvegarde
-    dump(model, 'models/w2v_rf_model.joblib')
-    w2v_model.save('models/w2v_model.model')
+    dump(model, base_dir.w2v_rf_model_path)
+    w2v_model.save(str(base_dir.w2v_model_path))
     print("Modèles Word2Vec sauvegardés dans models/")

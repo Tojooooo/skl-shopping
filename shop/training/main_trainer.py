@@ -1,10 +1,14 @@
 import pandas as pd
+from pathlib import Path
 from sklearn.model_selection import train_test_split
 from bag_of_words import train_bow_model
 from tfidf import train_tfidf_model
 from word2vec import train_word2vec_model
 
-df = pd.read_csv('data/avis.csv')
+base_dir = Path(__file__).resolve().parent
+csv_file_path = base_dir / 'data' / 'avis.csv'
+
+df = pd.read_csv(csv_file_path)
 X = df['phrase'].values
 y = df['label'].values
 

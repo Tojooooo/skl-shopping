@@ -2,7 +2,7 @@ from sklearn.feature_extraction.text import CountVectorizer
 from sklearn.ensemble import RandomForestClassifier
 from sklearn.metrics import accuracy_score, confusion_matrix
 from joblib import dump
-
+import base_dir
 
 def train_bow_model(X_train, X_test, y_train, y_test):
     # Initialization
@@ -20,6 +20,6 @@ def train_bow_model(X_train, X_test, y_train, y_test):
     print(confusion_matrix(y_test, y_pred))
 
     # Sauvegarde
-    dump(model, 'models/bow_model.joblib')
-    dump(vectorizer, 'models/bow_vectorizer.joblib')
+    dump(model, base_dir.bow_model_path)
+    dump(vectorizer, base_dir.bow_vectorizer_path)
     print("Modèle BoW sauvegardé dans models/")

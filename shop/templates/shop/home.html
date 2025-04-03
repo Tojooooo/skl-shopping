@@ -5,7 +5,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Skl - Home</title>
+    <title>Skl - Fandraisana</title>
     <link rel="stylesheet" href="{% static 'css/styles.css' %}">
     <link href="{% static 'css/bootstrap.min.css' %}" rel="stylesheet">
     <script src="{% static 'js/jquery.min.js' %}"></script>
@@ -21,17 +21,17 @@
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
                 </button>
-                <a class="navbar-brand" href="{% url 'product_list' %}">SKL-Shoppinggg</a>
+                <a class="navbar-brand" href="{% url 'product_list' %}">ShopGasy</a>
             </div>
             <div id="navbar" class="navbar-collapse collapse">
                 <ul class="nav navbar-nav navbar-right">
-                    <li><a href="{% url 'product_list' %}">Home</a></li>
+                    <li><a href="{% url 'product_list' %}">Fandraisana</a></li>
                     {% if request.session.user_id %}
-                        <li><a href="#">Welcome, {{ request.session.username }}</a></li>
-                        <li><a href="{% url 'logout' %}">Logout</a></li>
+                        <li><a href="#">Tongasoa, {{ request.session.username }}</a></li>
+                        <li><a href="{% url 'logout' %}">Hiala</a></li>
                     {% else %}
-                        <li><a href="{% url 'login' %}">Login</a></li>
-                        <li><a href="{% url 'register' %}">Register</a></li>
+                        <li><a href="{% url 'login' %}">Hiditra</a></li>
+                        <li><a href="{% url 'register' %}">Hisoratra anarana</a></li>
                     {% endif %}
                 </ul>
             </div>
@@ -41,7 +41,7 @@
     <div class="container">
         <div class="row">
             <div class="col-lg-12">
-                <h1 class="page-header">Our Products</h1>
+                <h1 class="page-header">Ny Entanay</h1>
             </div>
         </div>
 
@@ -54,7 +54,7 @@
                             {{ product.name }}
                             {% if product in product_payments %}
                                 <span class="pull-right text-success">
-                                    <i class="fa fa-check-circle"></i> Purchased {{ product_payments|get_item:product|length }} time(s)
+                                    <i class="fa fa-check-circle"></i> Misy Hevitra {{ product_payments|get_item:product|length }}
                                 </span>
                             {% endif %}
                         </h3>
@@ -71,14 +71,20 @@
                         </div>
                     </div>
                     <div class="panel-footer">
-                        <a href="{% url 'payment' product.id %}" class="btn btn-primary btn-block">Buy Now</a>
+                        {% if product in product_payments %}
+                            <div class="btn-group btn-group-justified">
+                                <a href="{% url 'add_comment' product.id %}" class="btn btn-info">Haneho hevitra</a>
+                            </div>
+                        {% else %}
+                            <a href="{% url 'payment' product.id %}" class="btn btn-primary btn-block">Hividy</a>
+                        {% endif %}
                     </div>
                 </div>
             </div>
             {% empty %}
             <div class="col-md-12">
                 <div class="alert alert-info">
-                    <p>No products available at the moment.</p>
+                    <p>Tsy misy entana aloha hatreto.</p>
                 </div>
             </div>
             {% endfor %}
@@ -87,7 +93,7 @@
         {% if product_payments %}
         <div class="row">
             <div class="col-lg-12">
-                <h2 class="page-header">Your Purchase History</h2>
+                <h2 class="page-header">Ireo efa novidiana miaraka amin'ny fanehoan-kevitra</h2>
             </div>
         </div>
 
@@ -106,7 +112,7 @@
                         <div class="alert alert-{% if payment.sentiment == 1 %}success{% else %}danger{% endif %}">
                             <h4>
                                 <i class="fa fa-{% if payment.sentiment == 1 %}smile-o{% else %}frown-o{% endif %}"></i>
-                                Comment from {{ payment.order_date|date:"F j, Y" }}
+                                Hevitra tamin'ny {{ payment.order_date|date:"F j, Y" }}
                                 <small class="pull-right">
                                     Classe: {% if payment.sentiment == 1 %}Positive{% else %}Negative{% endif %}
                                 </small>
@@ -124,7 +130,7 @@
 
     <footer class="footer">
         <div class="container">
-            <p class="text-muted text-center">&copy; {% now "Y" %} ShopEasy. All rights reserved.</p>
+            <p class="text-muted text-center">&copy; {% now "Y" %} ShopGasy. Maminavina fanehoan-kevitra.</p>
         </div>
     </footer>
 </body>

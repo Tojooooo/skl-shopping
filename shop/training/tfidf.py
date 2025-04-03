@@ -2,7 +2,7 @@ from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.ensemble import RandomForestClassifier
 from sklearn.metrics import accuracy_score, confusion_matrix
 from joblib import dump
-
+import base_dir
 
 def train_tfidf_model(X_train, X_test, y_train, y_test):
     # Création et transformation TF-IDF
@@ -21,6 +21,7 @@ def train_tfidf_model(X_train, X_test, y_train, y_test):
     print(confusion_matrix(y_test, y_pred))
 
     # Sauvegarde
-    dump(model, 'models/tfidf_model.joblib')
-    dump(vectorizer, 'models/tfidf_vectorizer.joblib')
+    print(base_dir.tfidf_model_path)
+    dump(model, base_dir.tfidf_model_path)
+    dump(vectorizer, base_dir.tfidf_vectorizer_path)
     print("Modèle TF-IDF sauvegardé dans models/")
