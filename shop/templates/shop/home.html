@@ -33,6 +33,7 @@
                         <li><a href="{% url 'login' %}">Hiditra</a></li>
                         <li><a href="{% url 'register' %}">Hisoratra anarana</a></li>
                     {% endif %}
+                        <li><a href="{% url 'add_data' %}">Hanampy data</a></li>
                 </ul>
             </div>
         </div>
@@ -114,7 +115,7 @@
                                 <i class="fa fa-{% if payment.sentiment == 1 %}smile-o{% else %}frown-o{% endif %}"></i>
                                 Hevitra tamin'ny {{ payment.order_date|date:"F j, Y" }}
                                 <small class="pull-right">
-                                    Classe: {% if payment.sentiment == 1 %}Positive{% else %}Negative{% endif %}
+                                    Classe: <h1>{% if payment.sentiment == 1 %}Positive{% else %}Negative{% endif %}</h1>
                                 </small>
                             </h4>
                             <p>{{ payment.comment }}</p>

@@ -6,7 +6,7 @@ from nltk.tokenize import word_tokenize
 import nltk
 from pathlib import Path
 
-nltk.download('punkt')
+# nltk.download('punkt')
 
 base_dir = Path(__file__).resolve().parent
 bow_model_path = base_dir / 'training' / 'models' / 'bow_model.joblib'
@@ -45,10 +45,10 @@ class Classifier:
         else:
             raise ValueError("Invalid method. Choose 'bow', 'tfidf', or 'word2vec'")
 
-        return prediction[0]  # 0 for negative, 1 for positive
+        return prediction[0]  # 0 negatif, 1 positif
 
     def get_sentiment_label(self, prediction):
-        return "Positive" if prediction == 1 else "Negative"
+        return "Positif" if prediction == 1 else "Negatif"
 
 if __name__ == '__main__':
     # test

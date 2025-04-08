@@ -1,8 +1,15 @@
+from pathlib import Path
 from django.shortcuts import render, get_object_or_404, redirect
 from .models import Product, Payment, User
 from django.forms import ModelForm
 from django.contrib import messages
 from .Classifier import Classifier
+import pandas as pd
+from .training.word2vec import train_word2vec_model
+from sklearn.model_selection import train_test_split
+
+
+base_dir = Path(__file__).resolve().parent
 
 
 class CommentForm(ModelForm):
@@ -92,7 +99,7 @@ def payment_view(request, product_id):
     product = get_object_or_404(Product, id=product_id)
     user = User.objects.get(id=user_id)
 
-    # Vérifier si l'utilisateur a déjà acheté ce produit
+    # Raha efa nividy
     has_purchased = Payment.objects.filter(user=user, product=product, is_purchase=True).exists()
 
     if request.method == 'POST':
@@ -103,7 +110,7 @@ def payment_view(request, product_id):
             payment.user = user
             payment.is_purchase = True  # C'est un achat
 
-            # Analyser le sentiment du commentaire s'il est fourni
+            # Analyser 
             if payment.comment:
                 analyzer = Classifier()
                 payment.sentiment = analyzer.analyze_sentiment(text=payment.comment, method="word2vec")
@@ -159,3 +166,40 @@ def add_comment_view(request, product_id):
         'form': form,
         'is_purchase': False
     })
+    
+def add_new_data(request):
+    user_id = request.session.get('user_id')
+    base_dir = Path(__file__).resolve().parent
+
+    if not user_id:
+        return redirect('login')
+        
+    if request.method == 'POST':
+        comment = request.POST.get('comment')
+        label = request.POST.get('label')
+        
+        csv_file_path = base_dir / 'training' / 'data' / 'avis.csv'
+        
+        try:
+            with open(csv_file_path, 'a', encoding='utf-8') as f:
+                f.write(f'\n{comment};{label}\n')
+            
+            if 'retrain' in request.POST:
+                df = pd.read_csv(csv_file_path, delimiter=';')
+                X = df['phrase'].values
+                y = df['label'].values
+                
+                X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.3, random_state=42)
+                
+                train_word2vec_model(X_train, X_test, y_train, y_test)
+                
+                messages.success(request, "Vita ny entrainement")
+            else:
+                messages.success(request, "Tafiditra ny data")
+            
+            return redirect('product_list')
+        except Exception as e:
+            messages.error(request, f"Erreur lors de l'ajout de données: {str(e)}")
+        
+    
+    return render(request, 'shop/add_data.html')

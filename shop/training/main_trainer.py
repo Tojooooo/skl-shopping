@@ -8,7 +8,7 @@ from word2vec import train_word2vec_model
 base_dir = Path(__file__).resolve().parent
 csv_file_path = base_dir / 'data' / 'avis.csv'
 
-df = pd.read_csv(csv_file_path)
+df = pd.read_csv(csv_file_path, delimiter=';')
 X = df['phrase'].values
 y = df['label'].values
 

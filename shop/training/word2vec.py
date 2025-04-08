@@ -6,9 +6,14 @@ import numpy as np
 import nltk
 from nltk.tokenize import word_tokenize
 import os
-import base_dir
+from pathlib import Path
 
-nltk.download('punkt_tab')
+base_dir = Path(__file__).resolve().parent
+
+w2v_rf_model_path = base_dir / 'models' / 'w2v_rf_model.joblib'
+w2v_model_path = base_dir / 'models' / 'w2v_model.model'
+
+# nltk.download('punkt_tab')
 
 
 def train_word2vec_model(X_train, X_test, y_train, y_test):
@@ -34,17 +39,16 @@ def train_word2vec_model(X_train, X_test, y_train, y_test):
     X_train_w2v = np.array([get_sentence_vector(tokens) for tokens in tokenized_train])
     X_test_w2v = np.array([get_sentence_vector(tokens) for tokens in tokenized_test])
 
-    # Entraînement du modèle
     model = RandomForestClassifier(n_estimators=100, random_state=42)
     model.fit(X_train_w2v, y_train)
 
-    # Évaluation test
+    # test
     y_pred = model.predict(X_test_w2v)
     print(f"Accuracy: {accuracy_score(y_test, y_pred):.4f}")
     print("Matrice de confusion:")
     print(confusion_matrix(y_test, y_pred))
 
     # Sauvegarde
-    dump(model, base_dir.w2v_rf_model_path)
-    w2v_model.save(str(base_dir.w2v_model_path))
+    dump(model, w2v_rf_model_path)
+    w2v_model.save(str(w2v_model_path))
     print("Modèles Word2Vec sauvegardés dans models/")

@@ -5,16 +5,15 @@ from joblib import dump
 import base_dir
 
 def train_tfidf_model(X_train, X_test, y_train, y_test):
-    # Création et transformation TF-IDF
+    # Initialisation
     vectorizer = TfidfVectorizer()
     X_train_tfidf = vectorizer.fit_transform(X_train)
     X_test_tfidf = vectorizer.transform(X_test)
 
-    # Entraînement du modèle
     model = RandomForestClassifier(n_estimators=100, random_state=42)
     model.fit(X_train_tfidf, y_train)
 
-    # Évaluation
+    # test
     y_pred = model.predict(X_test_tfidf)
     print(f"Accuracy: {accuracy_score(y_test, y_pred):.4f}")
     print("Matrice de confusion:")
